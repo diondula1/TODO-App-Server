@@ -15,7 +15,17 @@ module.exports = {
           var isMatch = await _user.comparePassword(_password)
           if (isMatch) {
             var jwt = await jwtService.generateJwt({ _id: _user._id, Username: _username })
-            res.status(200).send(new ReturnObj(true, 'MSG_SUCCESS_LOGIN', 200, {'token' : jwt, 'role' : _user.Role }))
+            
+            const _data = {
+              _id: _user._id,
+              token: jwt,
+              Name: _user.Name,
+              Surname: _user.Surname,
+              Username: _user.Username
+            }
+            console.log(_data)
+
+            res.status(200).send(new ReturnObj(true, 'MSG_SUCCESS_LOGIN', 200, _data))
           } else {
             throw new Error('USER_PSW_NOT_MATCH')
           }
@@ -38,9 +48,16 @@ module.exports = {
       if (_existing) {
         throw new Error('ERR_THIS_USER_EXISTS')
       } else {
-        const _data = await _user.save()
-        var jwt = await jwtService.generateJwt({ _id: _data._id, Username: _data.Username })
-        res.status(200).send(new ReturnObj(true, 'MSG_SUCCESS_REGISTER', 200, jwt))
+        const _userData = await _user.save()
+        var jwt = await jwtService.generateJwt({ _id: _userData._id, Username: _userData.Username })
+        const _data = {
+          _id: _userData._id,
+          token: jwt,
+          Name: _userData.Name,
+          Surname: _userData.Surname,
+          Username: _userData.Username
+        }
+        res.status(200).send(new ReturnObj(true, 'MSG_SUCCESS_REGISTER', 200, _data))
       }
     } catch (error) {
       res.status(200).send(new ReturnObj(false, error.message || 'ERR_SOMETHING_WENT_WRONG', 500, null))

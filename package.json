@@ -1,6 +1,4 @@
 {
-
- 
   "name": "mean-template",
   "version": "2.0.0",
   "description": "A MEAN Stack (Mongo, Express, Angular, Node) simple application template",
