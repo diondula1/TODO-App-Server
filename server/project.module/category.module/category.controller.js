@@ -4,7 +4,7 @@ const categoryService = require('./category.service')
 const cardController = require('./card.module/card.controller')
 
 router.get('/list',  categoryService.list)
-router.post('/save', categoryService.save)
+router.post('/add', categoryService.save)
 router.delete('/delete', categoryService.remove)
 
 //Child

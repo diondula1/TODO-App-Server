@@ -11,13 +11,13 @@ module.exports = {
         try {
             const _projectId = req.params.project_id
             const _category = new Category(req.body)
-           
-            const qry = {  $addToSet: { 'Category': _category } }
-            // const _data = await Category.findByIdAndUpdate({ _id: _category }, qry, { new: true })
+            await _category.save()
+
+            const qry = {  $addToSet: { 'Categories': _category } }
             const _project = await Project.findByIdAndUpdate({ _id: _projectId }, qry, { new: true })
 
             await _project.save()
-            res.send(new ReturnObj(true, 'MSG_USER_ADDED_ON_BOARD', 200, _project))
+            res.send(new ReturnObj(true, 'MSG_USER_ADDED_ON_BOARD', 200, _category))
          
           } catch (error) {
             res.status(500).send(new ReturnObj(false, 'ERR_MEMBER_NOT_ADDED', 500, error.message))

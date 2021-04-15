@@ -7,7 +7,7 @@ const CategorySchema = require('./category.module/category.model')
 const ProjectSchema = new Schema({
     Title: String,
     Members: [{ type: Schema.Types.ObjectId, ref: 'AppUser' }],
-    Category: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
+    Categories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
     CreatedDate: { type: Date, default: Date.now() },
     CreatedBy: Schema.Types.ObjectId,
 })
