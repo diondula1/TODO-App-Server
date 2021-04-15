@@ -2,7 +2,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const ItemSchema = new Schema({
+const CardSchema = new Schema({
     Title: String,
     Description: String,
     Place: Number,
@@ -15,6 +15,6 @@ const ItemSchema = new Schema({
     CreatedBy: { type: Schema.Types.ObjectId, ref: 'AppUser', index: true } 
 })
 
-const ItemModel = mongoose.model('Item', ItemSchema)
+const CardModel = mongoose.model('Card', CardSchema)
 
-module.exports = ItemModel
+module.exports = CardModel

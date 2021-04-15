@@ -1,12 +1,12 @@
 
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const ItemSchema = require('./item.module/item.model').schema
+const CardSchema = require('./card.module/card.model').schema
 
 
 const CategorySchema = new Schema({
     Title: String,
-    Items: [{ type: Schema.Types.ObjectId, ref: 'Item' }],
+    Cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
     Place: Number,
     CreatedDate: { type: Date, default: Date.now() },
     Project: { type: Schema.Types.ObjectId, ref: 'Project' },

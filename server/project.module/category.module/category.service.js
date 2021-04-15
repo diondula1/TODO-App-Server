@@ -1,6 +1,6 @@
 const Project = require('./../project.model')
 const Category = require('./category.model')
-const Item = require('./item.module/item.model')
+
 const ReturnObj = require('../../models/return-object.model')
 
 
@@ -38,7 +38,7 @@ module.exports = {
     list: async function(req,res){
         try {
             const _projectId = req.params.project_id
-            const _data = await Category.find({ Project: _projectId }).populate('Items', 'Tile').exec()
+            const _data = await Category.find({ Project: _projectId }).populate('Cards', 'Tile').exec()
       
             res.send(new ReturnObj(true, 'MSG_USER_ADDED_ON_BOARD', 200, _data))
         } catch (error) {
