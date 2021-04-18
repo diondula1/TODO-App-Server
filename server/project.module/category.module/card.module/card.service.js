@@ -13,7 +13,11 @@ module.exports = {
 
         _card.Project = _projectId
         _card.Category = _categoryid
+
         await _card.save()
+        // await res.io.on('new card', (data) => socket.broadcast.emit('new card', _card));
+        res.io.to(_projectId).emit("new card", _card);
+
         res.send(new ReturnObj(true, 'MSG_USER_ADDED_ON_BOARD', 200, _card))
      
       } catch (error) {

@@ -16,6 +16,9 @@ const swaggerUi = require('swagger-ui-express');
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+var server = require('http').Server(app);
+server.listen(3002)
+var io = require('socket.io')(server);
 
 var options = {
   swaggerOptions: {
@@ -34,16 +37,32 @@ mongoose.connect('mongodb://localhost/TODO-Server', {useNewUrlParser:true,useUni
     console.log(err)
   } else { // If there is no error during db connection, continue proccess
 
+    io.on('room', function(room) {
+      console.log('connect ' + room)
+      io.join(room);
+    });
+
+    io.sockets.on('connection', function(socket) {
+      // once a client has connected, we expect to get a ping from them saying what room they want to join
+      socket.on('room', function(room) {
+        console.log('connect ' + room)
+          socket.join(room);
+      });
+  });
+
     // • `/dist` is default file output of ng build command. You can change
     // that on `angular-cli.json` config file but don't forget to change below line
     // too or server will not be able to locate our front-end part of application.
     app.use(express.static(path.join(__dirname, 'dist')))
+    const server = require('http').createServer(app);
 
+    server.listen(3001);
     // • This is a special method called `middleware`. Every request will be
     // executed on each request. If you want to exclude a specific route to make it
     // not enter on this middleware, simply declare that route before this function
     app.use('/', function (req, res, next) {
       // • Implement your logic here.
+      res.io = io;
       console.log('Time:', Date.now())
       next()
     })
@@ -72,5 +91,7 @@ mongoose.connect('mongodb://localhost/TODO-Server', {useNewUrlParser:true,useUni
     const PORT = 3000
     app.listen(PORT, () => console.log(`Application started successfully on port: ${PORT}!`))
 
+
+   
   }
 })
