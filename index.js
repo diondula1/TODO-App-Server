@@ -10,7 +10,7 @@ const mongoose = require('mongoose')
 const routeImporter = require('./routes')
 
 const swaggerUi = require('swagger-ui-express');
-
+const Project = require('./server/project.module/project.model')
 
 // • Creating Express instance. Later we will use this to declare routes
 const app = express()
@@ -37,10 +37,10 @@ mongoose.connect('mongodb://localhost/TODO-Server', {useNewUrlParser:true,useUni
     console.log(err)
   } else { // If there is no error during db connection, continue proccess
 
-    io.on('room', function(room) {
-      console.log('connect ' + room)
-      io.join(room);
-    });
+    // io.on('room', function(room) {
+    //   console.log('connect ' + room)
+    //   io.join(room);
+    // });
 
     io.sockets.on('connection', function(socket) {
       // once a client has connected, we expect to get a ping from them saying what room they want to join
@@ -50,6 +50,28 @@ mongoose.connect('mongodb://localhost/TODO-Server', {useNewUrlParser:true,useUni
       });
   });
 
+  io.sockets.on('connection', function(socket) {
+    // once a client has connected, we expect to get a ping from them saying what room they want to join
+    socket.on('notification', async function(userId,room) {
+      
+      try {
+        console.log('UserID:  ' + userId)
+        var _data = await Project.find({ $or: [{ 'CreatedBy' : userId }, { 'Members' : userId}] }).select('_id').exec()
+        var productIdArray = ['']
+        _data.forEach(element => {
+          productIdArray.push(element._id.toString())
+        });
+        
+        console.log('Connect Projects:  ' + productIdArray)
+        
+        await socket.join(productIdArray);
+        console.log(socket.rooms); // Set { <socket.id>, "room 237" }
+
+      } catch (error) {
+        console.log('Error:' + error)
+      }
+    });
+});
     // • `/dist` is default file output of ng build command. You can change
     // that on `angular-cli.json` config file but don't forget to change below line
     // too or server will not be able to locate our front-end part of application.

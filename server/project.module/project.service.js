@@ -25,7 +25,7 @@ module.exports = {
     },
 
     save: async function(req,res){
-        console.log("dasd")
+        
         try {
    
             const _project = new Project(req.body)

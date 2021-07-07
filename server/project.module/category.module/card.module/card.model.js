@@ -8,7 +8,7 @@ const CardSchema = new Schema({
     Place: Number,
     Color: String,
     StartingDate: Date,
-    EndingDate: Date,
+    DueDate: Date,
     Category: { type: Schema.Types.ObjectId, ref: 'Category', index: true} ,
     Project: { type: Schema.Types.ObjectId, ref: 'Project', index: true} ,
     CreatedDate: { type: Date, default: Date.now()},
